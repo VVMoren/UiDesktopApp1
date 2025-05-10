@@ -1,0 +1,72 @@
+﻿<Page x:Class="UiDesktopApp1.Views.Pages.UPDPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:UiDesktopApp1.Views.Pages"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      mc:Ignorable="d"
+      Background="#202020"
+      Foreground="White">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- 🔍 Поиск чеков ККТ -->
+            <GroupBox Header="Поиск чеков ККТ" Grid.Row="0" HorizontalAlignment="Stretch">
+                <StackPanel Orientation="Vertical">
+
+                    <!-- Параметры поиска -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <Button Content="Найти чеки" 
+                                Click="SearchReceipts_Click" 
+                                Width="120" 
+                                Height="30" 
+                                Margin="0,20,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"/>
+                    </StackPanel>
+
+                    <!-- Список найденных чеков -->
+                    <GroupBox Header="Найденные чеки" Margin="0,0,0,10">
+                        <DataGrid x:Name="ReceiptsDataGrid" 
+                                  AutoGenerateColumns="False" 
+                                  Height="200" 
+                                  SelectionChanged="ReceiptsDataGrid_SelectionChanged"
+                                  ScrollViewer.CanContentScroll="True"
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  HorizontalAlignment="Stretch"
+                                  Width="Auto">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="№" Binding="{Binding DidShort}"/>
+                                <DataGridTextColumn Header="Дата получения" Binding="{Binding ReceivedAt, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}"/>
+                                <DataGridTextColumn Header="Тип" Binding="{Binding DocumentType}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+
+                    <!-- Детали чека -->
+                    <GroupBox Header="Содержимое чека">
+                        <DataGrid x:Name="ProductsDataGrid" 
+                                  AutoGenerateColumns="False" 
+                                  CanUserAddRows="False" 
+                                  Height="300"
+                                  ScrollViewer.CanContentScroll="True"
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  HorizontalAlignment="Stretch"
+                                  Width="Auto">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Код маркировки" Binding="{Binding codeString}"/>
+                                <DataGridTextColumn Header="Наименование" Binding="{Binding ProductName}"/>
+                                <DataGridTextColumn Header="Количество" Binding="{Binding Quantity}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+                </StackPanel>
+            </GroupBox>
+        </Grid>
+    </ScrollViewer>
+</Page>

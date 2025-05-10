@@ -1,0 +1,147 @@
+﻿<Page
+    x:Class="UiDesktopApp1.Views.Pages.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:UiDesktopApp1.Views.Pages"
+    xmlns:helpers="clr-namespace:UiDesktopApp1.Helpers"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="SettingsPage"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
+    ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+    ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+
+
+
+    <Page.Resources>
+        <!-- Конвертер -->
+        <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+
+        <!-- Источник для коллекции настроек -->
+        <CollectionViewSource x:Key="GroupedSettings" Source="{Binding KktSettings}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Category" />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+    </Page.Resources>
+
+    <StackPanel>
+        <TextBlock Margin="0,20,0,0" HorizontalAlignment="Center" FontSize="20" FontWeight="Medium" Text="Настройки" />
+        <Image x:Name="imgKktStatus" Width="42" Height="43" HorizontalAlignment="Left" Margin="10,10,0,0" Source="L:\source\repos\AtolKKTApp2\icon\kkt_noconnect.png"/>
+
+        <!-- Панель с кнопками -->
+        <StackPanel Margin="0,10,0,0" Orientation="Horizontal" Height="30">
+            <Button x:Name="btnConnectKKT" Content="Подключить ККТ" Height="35" Width="132" Click="btnConnectKKT_Click" BorderThickness="1,1,4,3"/>
+            <ComboBox x:Name="comboComPorts" Height="35" Width="100" Margin="0,0,10,0" VerticalAlignment="Center" FontSize="7" Loaded="comboComPorts_Loaded"/>
+            <Button x:Name="btnCloseSmena" Content="Закрыть" Height="35" Width="77" FontSize="10" Click="btnCloseSmena_Click"/>
+            <Button x:Name="btnOpenSmena" Content="Открыть" Height="34" Width="84" FontSize="10" Click="btnOpenSmena_Click"/>
+            <Button x:Name="btnSettings" Content="Настройки" Height="35" Width="95" FontSize="10" Click="btnSettings_Click"/>
+            <Button x:Name="GetToken" Content="Получить Токен" HorizontalAlignment="Right" Command="{Binding SendRequestCommand}" Width="128" Height="35"/>
+        </StackPanel>
+
+        <!-- Expander для настроек ККТ -->
+        <Expander x:Name="expanderKktSettings"
+                  Header="Настройки ККТ"
+                  IsExpanded="False"
+                  IsEnabled="False"
+                  Margin="10,10,10,0">
+            <StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
+                    <ItemsControl ItemsSource="{Binding Source={StaticResource GroupedSettings}}">
+                        <ItemsControl.GroupStyle>
+                            <GroupStyle>
+                                <GroupStyle.HeaderTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,10,0,5" />
+                                    </DataTemplate>
+                                </GroupStyle.HeaderTemplate>
+                            </GroupStyle>
+                        </ItemsControl.GroupStyle>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="0,2">
+                                    <TextBlock Text="{Binding Name}" Width="300" VerticalAlignment="Center"/>
+                                    <TextBlock Text=":" Margin="5,0"/>
+                                    <StackPanel Width="300">
+                                        <ContentControl Content="{Binding}">
+                                            <ContentControl.Style>
+                                                <Style TargetType="ContentControl">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Type}" Value="bool">
+                                                            <Setter Property="ContentTemplate">
+                                                                <Setter.Value>
+                                                                    <DataTemplate>
+                                                                        <CheckBox IsChecked="{Binding BoolValue, Mode=TwoWay}" />
+                                                                    </DataTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Type}" Value="range">
+                                                            <Setter Property="ContentTemplate">
+                                                                <Setter.Value>
+                                                                    <DataTemplate>
+                                                                        <TextBox Text="{Binding StringValue, Mode=TwoWay}" Width="100" />
+                                                                    </DataTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Type}" Value="select">
+                                                            <Setter Property="ContentTemplate">
+                                                                <Setter.Value>
+                                                                    <DataTemplate>
+                                                                        <ComboBox ItemsSource="{Binding Options}"
+                                                                                  DisplayMemberPath="Text"
+                                                                                  SelectedValuePath="Value"
+                                                                                  SelectedValue="{Binding SelectedValue, Mode=TwoWay}" />
+                                                                    </DataTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Type}" Value="string">
+                                                            <Setter Property="ContentTemplate">
+                                                                <Setter.Value>
+                                                                    <DataTemplate>
+                                                                        <TextBox Text="{Binding StringValue, Mode=TwoWay}" Width="200" />
+                                                                    </DataTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ContentControl.Style>
+                                        </ContentControl>
+                                    </StackPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <Button x:Name="btnSaveSettings"
+                        Content="Сохранить настройки"
+                        Margin="10,10,0,0"
+                        Width="150"
+                        Click="btnSaveSettings_Click"/>
+            </StackPanel>
+        </Expander>
+
+        <!-- Панель выбора файла лога -->
+        <StackPanel Orientation="Horizontal" Margin="10,10,0,0" VerticalAlignment="Center">
+            <Button Content="Выбрать файл лога"
+                    Width="150"
+                    Margin="0,0,10,0"
+                    Click="BtnSelectLogFile_Click" />
+            <TextBox x:Name="txtLogFilePath"
+                     Width="500"
+                     IsReadOnly="True"
+                     Text="{Binding LogFilePath, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}, Mode=OneWay}" />
+        </StackPanel>
+
+        <!-- Версия приложения -->
+        <TextBlock Margin="0,12,0,0" Text="{Binding ViewModel.AppVersion, Mode=OneWay}" />
+    </StackPanel>
+</Page>

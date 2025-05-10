@@ -1,0 +1,28 @@
+﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UiDesktopApp1.Views.Windows"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        x:Class="UiDesktopApp1.Views.Windows.DellDiapason"
+        mc:Ignorable="d"
+        Title="DellDiapason" Height="110" Width="307"
+        WindowStyle="None"
+        Background="#202020"
+        Foreground="White">
+
+    <Grid Margin="0,1,0,0">
+        <!-- Текстовые поля для ввода диапазона индексов -->
+        <ui:TextBox x:Name="StartIndexTextBox" HorizontalAlignment="Left" Margin="31,30,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50"/>
+        <ui:TextBox x:Name="EndIndexTextBox" HorizontalAlignment="Left" Margin="215,30,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50"/>
+
+        <!-- Подписи -->
+        <Label Content="C" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="15"/>
+        <Label Content="ПО" HorizontalAlignment="Left" Margin="157,35,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="15"/>
+        <Label Content="Удаление диапазона строк" HorizontalAlignment="Left" Margin="80,3,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+
+        <!-- Кнопки для подтверждения или отмены -->
+        <ui:Button Content="ОК" HorizontalAlignment="Left" Margin="31,78,0,0" VerticalAlignment="Top" Height="23" FontSize="8" Background="#FF218C1D" Foreground="#FF218C1D" Click="OnOkClick"/>
+        <ui:Button Content="Отмена" Margin="215,78,0,0" VerticalAlignment="Top" Height="23" Background="#FFFB1010" Foreground="#FFFB1010" Click="OnCancelClick"/>
+    </Grid>
+</Window>
